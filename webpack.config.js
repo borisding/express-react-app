@@ -55,7 +55,7 @@ function getWebpackConfig() {
   const config = {
     mode: isDev ? 'development' : 'production',
     devtool: isDev ? 'cheap-module-inline-source-map' : 'source-map',
-    context: paths.client,
+    context: paths.src,
     entry: './App.js',
     resolve: {
       extensions: ['.jsx', '.js', '.json', '.css', '.scss', '.sass']
@@ -71,7 +71,7 @@ function getWebpackConfig() {
         },
     output: {
       publicPath,
-      path: paths.public,
+      path: paths.dist,
       filename: isDev ? '[name].js' : '[name].[contenthash:8].js',
       chunkFilename: isDev
         ? '[name].chunk.js'
@@ -143,7 +143,7 @@ function getWebpackConfig() {
       }),
       new HtmlWebpackPlugin({
         title: process.env.APP_NAME || 'React App',
-        template: `${paths.assets}/index.ejs`
+        template: `${paths.src}/assets/index.ejs`
       })
     ],
     node: {
