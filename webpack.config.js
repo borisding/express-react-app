@@ -16,7 +16,7 @@ function createWebpackConfig() {
         loader: MiniCssExtractPlugin.loader,
         options: {
           hmr: !!isDev,
-          reloadAll: true
+          reloadAll: !!isDev
         }
       },
       {
