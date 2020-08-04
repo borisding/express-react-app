@@ -6,17 +6,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const { isDev, paths } = require('./utils');
 
-// the style loaders for css/scss
 function getStyleLoaders(cssLoaderOptions = {}) {
   const sourceMap = !!isDev;
-  const reloadAll = true;
-
   return [
     {
       loader: MiniCssExtractPlugin.loader,
       options: {
         hmr: !!isDev,
-        reloadAll
+        reloadAll: true
       }
     },
     {
@@ -38,7 +35,6 @@ function getStyleLoaders(cssLoaderOptions = {}) {
   ];
 }
 
-// file loaders for both images and fonts
 function getFileLoaders(options) {
   return [
     {
@@ -60,8 +56,17 @@ function getWebpackConfig() {
     context: paths.client,
     entry: './App.js',
     resolve: {
-      extensions: ['.jsx', '.js', '.json', '.css']
+      extensions: ['.jsx', '.js', '.json', '.css', '.scss', '.sass']
     },
+    performance: isDev
+      ? { hints: false }
+      : {
+          maxEntrypointSize: 400000,
+          maxAssetSize: 400000,
+          assetFilter: assetFilename => {
+            return !/\.map$/.test(assetFilename);
+          }
+        },
     output: {
       path: paths.public,
       publicPath: process.env.PUBLIC_PATH || '/',
@@ -138,7 +143,16 @@ function getWebpackConfig() {
         title: process.env.APP_NAME || 'React App',
         template: `${paths.assets}/index.ejs`
       })
-    ]
+    ],
+    node: {
+      child_process: 'empty',
+      dgram: 'empty',
+      dns: 'mock',
+      fs: 'empty',
+      module: 'empty',
+      net: 'empty',
+      tls: 'empty'
+    }
   };
 
   if (isDev) {
