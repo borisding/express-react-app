@@ -1,4 +1,4 @@
-import { Layout } from '../componets';
+import { Layout } from '../components';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
 
