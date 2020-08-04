@@ -1,3 +1,7 @@
+const paths = require('./paths');
+const isDev = process.env.NODE_ENV === 'development';
+
 module.exports = {
-  paths: require('./paths')
+  isDev,
+  paths
 };
