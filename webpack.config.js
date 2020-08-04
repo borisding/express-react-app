@@ -6,50 +6,52 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const { isDev, paths } = require('./utils');
 
-function getStyleLoaders(cssLoaderOptions = {}) {
-  const sourceMap = !!isDev;
-  return [
-    {
-      loader: MiniCssExtractPlugin.loader,
-      options: {
-        hmr: !!isDev,
-        reloadAll: true
-      }
-    },
-    {
-      loader: 'css-loader',
-      options: {
-        sourceMap,
-        importLoaders: 2,
-        ...cssLoaderOptions
-      }
-    },
-    {
-      loader: 'postcss-loader',
-      options: { sourceMap }
-    },
-    {
-      loader: 'sass-loader',
-      options: { sourceMap }
-    }
-  ];
-}
-
-function getFileLoaders(options) {
-  return [
-    {
-      loader: 'url-loader',
-      options: {
-        fallback: 'file-loader',
-        publicPath,
-        limit: 10240,
-        ...options
-      }
-    }
-  ];
-}
-
 function getWebpackConfig() {
+  const publicPath = process.env.PUBLIC_PATH || '/';
+
+  const getStyleLoaders = (cssLoaderOptions = {}) => {
+    const sourceMap = !!isDev;
+    return [
+      {
+        loader: MiniCssExtractPlugin.loader,
+        options: {
+          hmr: !!isDev,
+          reloadAll: true
+        }
+      },
+      {
+        loader: 'css-loader',
+        options: {
+          sourceMap,
+          importLoaders: 2,
+          ...cssLoaderOptions
+        }
+      },
+      {
+        loader: 'postcss-loader',
+        options: { sourceMap }
+      },
+      {
+        loader: 'sass-loader',
+        options: { sourceMap }
+      }
+    ];
+  };
+
+  const getFileLoaders = options => {
+    return [
+      {
+        loader: 'url-loader',
+        options: {
+          fallback: 'file-loader',
+          publicPath,
+          limit: 10240,
+          ...options
+        }
+      }
+    ];
+  };
+
   const config = {
     mode: isDev ? 'development' : 'production',
     devtool: isDev ? 'cheap-module-inline-source-map' : 'source-map',
@@ -68,8 +70,8 @@ function getWebpackConfig() {
           }
         },
     output: {
+      publicPath,
       path: paths.public,
-      publicPath: process.env.PUBLIC_PATH || '/',
       filename: isDev ? '[name].js' : '[name].[contenthash:8].js',
       chunkFilename: isDev
         ? '[name].chunk.js'
