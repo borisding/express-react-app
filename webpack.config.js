@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const { isDev, paths } = require('./utils');
 
-function getWebpackConfig() {
+function createWebpackConfig() {
   const publicPath = process.env.PUBLIC_PATH || '/';
 
   const getStyleLoaders = (cssLoaderOptions = {}) => {
@@ -55,7 +55,7 @@ function getWebpackConfig() {
   const config = {
     mode: isDev ? 'development' : 'production',
     devtool: isDev ? 'cheap-module-inline-source-map' : 'source-map',
-    context: paths.src,
+    context: paths.client,
     entry: './App.js',
     resolve: {
       extensions: ['.jsx', '.js', '.json', '.css', '.scss', '.sass']
@@ -71,7 +71,7 @@ function getWebpackConfig() {
         },
     output: {
       publicPath,
-      path: paths.dist,
+      path: paths.build,
       filename: isDev ? '[name].js' : '[name].[contenthash:8].js',
       chunkFilename: isDev
         ? '[name].chunk.js'
@@ -143,7 +143,7 @@ function getWebpackConfig() {
       }),
       new HtmlWebpackPlugin({
         title: process.env.APP_NAME || 'React App',
-        template: `${paths.src}/assets/index.ejs`
+        template: `${paths.assets}/index.ejs`
       })
     ],
     node: {
@@ -183,4 +183,4 @@ function getWebpackConfig() {
   return config;
 }
 
-module.exports = getWebpackConfig();
+module.exports = createWebpackConfig();

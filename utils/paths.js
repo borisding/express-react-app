@@ -1,8 +1,9 @@
 const root = require('app-root-path');
 
 module.exports = {
-  dist: `${root}/dist`,
+  assets: `${root}/assets`,
+  build: `${root}/build`,
+  client: `${root}/client`,
   server: `${root}/server`,
-  src: `${root}/src`,
   utils: `${root}/utils`
 };
