@@ -70,7 +70,7 @@ const getFileLoaders = options => {
 
 const webpackConfig = {
   mode: isDev ? 'development' : 'production',
-  devtool: isDev ? 'cheap-module-inline-source-map' : 'source-map',
+  devtool: isDev ? 'cheap-module-source-map' : 'source-map',
   context: paths.client,
   entry: './App.js',
   resolve: {
