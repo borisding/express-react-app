@@ -23,7 +23,7 @@ const getStyleLoaders = (cssLoaderOptions = {}) => {
       }
     },
     {
-      loader: 'css-loader',
+      loader: require.resolve('css-loader'),
       options: {
         sourceMap,
         importLoaders: 2,
@@ -31,7 +31,7 @@ const getStyleLoaders = (cssLoaderOptions = {}) => {
       }
     },
     {
-      loader: 'postcss-loader',
+      loader: require.resolve('postcss-loader'),
       options: {
         sourceMap,
         plugins: () => [
@@ -47,7 +47,7 @@ const getStyleLoaders = (cssLoaderOptions = {}) => {
       }
     },
     {
-      loader: 'sass-loader',
+      loader: require.resolve('sass-loader'),
       options: { sourceMap }
     }
   ];
@@ -56,7 +56,7 @@ const getStyleLoaders = (cssLoaderOptions = {}) => {
 const getFileLoaders = options => {
   return [
     {
-      loader: 'url-loader',
+      loader: require.resolve('url-loader'),
       options: {
         fallback: 'file-loader',
         publicPath,
@@ -106,7 +106,9 @@ const webpackConfig = {
   optimization: {
     minimize: !isDev,
     minimizer: [
-      new TerserJSPlugin(),
+      new TerserJSPlugin({
+        /* set your options here, if any */
+      }),
       new OptimizeCssAssetsPlugin({
         cssProcessorOptions: {
           parser: require('postcss-safe-parser')
@@ -123,7 +125,7 @@ const webpackConfig = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: require.resolve('babel-loader'),
           options: {
             cacheDirectory: !!isDev,
             configFile: true
@@ -170,12 +172,28 @@ const webpackConfig = {
         ? `${publicCssFolder}/[name].chunk.css`
         : `${publicCssFolder}/[name].[contenthash:8].chunk.css`
     }),
-    new HtmlWebpackPlugin({
-      title: process.env.APP_NAME || 'React App',
-      template: `${paths.assets}/index.ejs`,
-      scriptLoading: 'defer',
-      minify: false
-    }),
+    new HtmlWebpackPlugin(
+      Object.assign(
+        {},
+        {
+          title: process.env.APP_NAME || 'React App',
+          template: `${paths.assets}/index.ejs`,
+          scriptLoading: 'defer'
+        },
+        !isDev && {
+          minify: {
+            collapseWhitespace: true,
+            minifyCSS: true,
+            minifyJS: true,
+            minifyURLs: true,
+            removeComments: true,
+            removeEmptyAttributes: true,
+            removeRedundantAttributes: true,
+            trimCustomFragments: true
+          }
+        }
+      )
+    ),
     !isDev &&
       new CompressionWebpackPlugin({
         filename(info) {
