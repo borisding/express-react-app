@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const { getEnv } = require('./env.loader');
 const { isDev, paths } = require('./utils');
 
@@ -162,7 +163,6 @@ const webpackConfig = {
     ]
   },
   plugins: [
-    new WebpackBar(),
     new webpack.DefinePlugin(getEnv().stringified),
     new MiniCssExtractPlugin({
       filename: isDev
@@ -193,8 +193,7 @@ const webpackConfig = {
           }
         }
       )
-    ),
-    isDev && new webpack.HotModuleReplacementPlugin()
+    )
   ],
   devServer: {
     port: devServerPort,
@@ -210,5 +209,30 @@ const webpackConfig = {
     }
   }
 };
+
+// opt in plugins based on current environment mode
+if (isDev) {
+  webpackConfig.plugins = [
+    ...webpackConfig.plugins,
+    new webpack.HotModuleReplacementPlugin()
+  ];
+} else {
+  webpackConfig.plugins = [
+    ...webpackConfig.plugins,
+    new WebpackBar(),
+    new CompressionWebpackPlugin({
+      filename(info) {
+        // info.file is the original asset filename
+        // info.path is the path of the original asset
+        // info.query is the query
+        return `${info.path}.gz${info.query}`;
+      },
+      algorithm: 'gzip',
+      test: /\.(js|css|html|svg)$/,
+      threshold: 10240,
+      minRatio: 0.8
+    })
+  ];
+}
 
 module.exports = webpackConfig;
