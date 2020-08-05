@@ -198,6 +198,7 @@ const webpackConfig = {
   devServer: {
     port: devServerPort,
     host: 'localhost',
+    stats: 'minimal',
     compress: true,
     hot: true,
     open: true,
