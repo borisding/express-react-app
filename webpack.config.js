@@ -4,13 +4,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const { getEnv } = require('./env.loader');
 const { isDev, paths } = require('./utils');
 
 const publicPath = process.env.PUBLIC_PATH || '/';
 const publicJsFolder = 'js';
 const publicCssFolder = 'css';
+const devServerPort = 3000;
 
 const getStyleLoaders = (cssLoaderOptions = {}) => {
   const sourceMap = !!isDev;
@@ -194,20 +194,21 @@ const webpackConfig = {
         }
       )
     ),
-    !isDev &&
-      new CompressionWebpackPlugin({
-        filename(info) {
-          // info.file is the original asset filename
-          // info.path is the path of the original asset
-          // info.query is the query
-          return `${info.path}.gz${info.query}`;
-        },
-        algorithm: 'gzip',
-        test: /\.(js|css|html|svg)$/,
-        threshold: 10240,
-        minRatio: 0.8
-      })
-  ]
+    isDev && new webpack.HotModuleReplacementPlugin()
+  ],
+  devServer: {
+    port: devServerPort,
+    host: 'localhost',
+    compress: true,
+    hot: true,
+    open: true,
+    historyApiFallback: true,
+    publicPath,
+    contentBase: paths.publicPath,
+    proxy: {
+      '/api': `http://localhost:${process.env.PORT || 5000}`
+    }
+  }
 };
 
 module.exports = webpackConfig;
