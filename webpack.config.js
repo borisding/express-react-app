@@ -9,6 +9,8 @@ const { getEnv } = require('./env.loader');
 const { isDev, paths } = require('./utils');
 
 const publicPath = process.env.PUBLIC_PATH || '/';
+const publicJsFolder = 'js';
+const publicCssFolder = 'css';
 
 const getStyleLoaders = (cssLoaderOptions = {}) => {
   const sourceMap = !!isDev;
@@ -61,13 +63,33 @@ const webpackConfig = {
   resolve: {
     extensions: ['.jsx', '.js', '.json', '.css', '.scss', '.sass']
   },
+  node: {
+    child_process: 'empty',
+    dgram: 'empty',
+    dns: 'mock',
+    fs: 'empty',
+    module: 'empty',
+    net: 'empty',
+    tls: 'empty'
+  },
+  performance: isDev
+    ? { hints: false }
+    : {
+        maxEntrypointSize: 400000,
+        maxAssetSize: 400000,
+        assetFilter: assetFilename => {
+          return !/\.map$/.test(assetFilename);
+        }
+      },
   output: {
     publicPath,
     path: paths.public,
-    filename: isDev ? 'js/[name].js' : 'js/[name].[contenthash:8].js',
+    filename: isDev
+      ? `${publicJsFolder}/[name].js`
+      : `${publicJsFolder}/[name].[contenthash:8].js`,
     chunkFilename: isDev
-      ? 'js/[name].chunk.js'
-      : 'js/[name].[contenthash:8].chunk.js'
+      ? `${publicJsFolder}/[name].chunk.js`
+      : `${publicJsFolder}/[name].[contenthash:8].chunk.js`
   },
   optimization: {
     minimize: !isDev,
@@ -125,58 +147,37 @@ const webpackConfig = {
       }
     ]
   },
-  node: {
-    child_process: 'empty',
-    dgram: 'empty',
-    dns: 'mock',
-    fs: 'empty',
-    module: 'empty',
-    net: 'empty',
-    tls: 'empty'
-  },
-  performance: isDev
-    ? { hints: false }
-    : {
-        maxEntrypointSize: 400000,
-        maxAssetSize: 400000,
-        assetFilter: assetFilename => {
-          return !/\.map$/.test(assetFilename);
-        }
-      },
   plugins: [
     new WebpackBar(),
     new webpack.DefinePlugin(getEnv().stringified),
     new MiniCssExtractPlugin({
-      filename: isDev ? 'css/[name].css' : 'css/[name].[contenthash:8].css',
+      filename: isDev
+        ? `${publicCssFolder}/[name].css`
+        : `${publicCssFolder}/[name].[contenthash:8].css`,
       chunkFilename: isDev
-        ? 'css/[name].chunk.css'
-        : 'css/[name].[contenthash:8].chunk.css'
+        ? `${publicCssFolder}/[name].chunk.css`
+        : `${publicCssFolder}/[name].[contenthash:8].chunk.css`
     }),
     new HtmlWebpackPlugin({
       title: process.env.APP_NAME || 'React App',
       template: `${paths.assets}/index.ejs`,
       scriptLoading: 'defer',
       minify: false
-    })
+    }),
+    !isDev &&
+      new CompressionWebpackPlugin({
+        filename(info) {
+          // info.file is the original asset filename
+          // info.path is the path of the original asset
+          // info.query is the query
+          return `${info.path}.gz${info.query}`;
+        },
+        algorithm: 'gzip',
+        test: /\.(js|css|html|svg)$/,
+        threshold: 10240,
+        minRatio: 0.8
+      })
   ]
 };
-
-if (!isDev) {
-  webpackConfig.plugins = [
-    ...webpackConfig.plugins,
-    new CompressionWebpackPlugin({
-      filename(info) {
-        // info.file is the original asset filename
-        // info.path is the path of the original asset
-        // info.query is the query
-        return `${info.path}.gz${info.query}`;
-      },
-      algorithm: 'gzip',
-      test: /\.(js|css|html|svg)$/,
-      threshold: 10240,
-      minRatio: 0.8
-    })
-  ];
-}
 
 module.exports = webpackConfig;
