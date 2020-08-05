@@ -32,7 +32,19 @@ const getStyleLoaders = (cssLoaderOptions = {}) => {
     },
     {
       loader: 'postcss-loader',
-      options: { sourceMap }
+      options: {
+        sourceMap,
+        plugins: () => [
+          require('postcss-flexbugs-fixes'),
+          require('postcss-preset-env')({
+            stage: 3,
+            autoprefixer: {
+              grid: true,
+              flexbox: 'no-2009'
+            }
+          })
+        ]
+      }
     },
     {
       loader: 'sass-loader',
