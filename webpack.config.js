@@ -3,6 +3,7 @@ const WebpackBar = require('webpackbar');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const { getEnv } = require('./env.loader');
 const { isDev, paths } = require('./utils');
@@ -153,7 +154,9 @@ const webpackConfig = {
     }),
     new HtmlWebpackPlugin({
       title: process.env.APP_NAME || 'React App',
-      template: `${paths.assets}/index.ejs`
+      template: `${paths.assets}/index.ejs`,
+      scriptLoading: 'defer',
+      minify: false
     })
   ]
 };
