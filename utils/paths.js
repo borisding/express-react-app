@@ -6,5 +6,6 @@ module.exports = {
   logs: `${root}/logs`,
   public: `${root}/public`,
   server: `${root}/server`,
+  storage: `${root}/storage`,
   utils: `${root}/utils`
 };
