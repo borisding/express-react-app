@@ -12,6 +12,11 @@
     "lint:style": "stylelint **/*.{css,scss,sass} --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
   "sideEffects": [
     "*.css",
     "*.scss",
