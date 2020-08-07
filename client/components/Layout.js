@@ -1,14 +1,14 @@
 import React, { Suspense } from 'react';
 import { withRouter } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback, Spinner } from './';
 
 function Layout({ route }) {
   return (
-    <div>
-      <Suspense fallback={<div>Loading...</div>}>
-        {renderRoutes(route.routes)}
-      </Suspense>
-    </div>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Suspense fallback={Spinner}>{renderRoutes(route.routes)}</Suspense>
+    </ErrorBoundary>
   );
 }
 
