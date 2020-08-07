@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { Spinner } from '../../components';
 import styles from './Home.module.scss';
 
 // fake delay for demo
-const sleep = (target, ms = 1000) => {
+const delay = (target, ms = 1000) => {
   return new Promise(resolve => setTimeout(() => resolve(target), ms));
 };
 
@@ -12,7 +13,7 @@ export default function Home() {
 
   useEffect(() => {
     fetch('/api/users')
-      .then(result => sleep(result.json()))
+      .then(result => delay(result.json()))
       .then(users => {
         setIsFetching(false);
         setUsers(users);
@@ -26,12 +27,14 @@ export default function Home() {
   return (
     <>
       <h1>Welcome!</h1>
-      <p>
-        Hello!
-        <span className={styles.greetUser}>
-          {isFetching ? 'fetching...' : users && users[0].name}
-        </span>
-      </p>
+      {isFetching ? (
+        <Spinner />
+      ) : (
+        <p>
+          Hello!
+          <span className={styles.greetUser}>{users && users[0].name}</span>
+        </p>
+      )}
     </>
   );
 }
