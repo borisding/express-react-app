@@ -20,6 +20,6 @@ app.listen(PORT, error => {
   if (error) {
     console.error(`ERROR: ${chalk.red(error)}`);
   } else {
-    console.info(chalk.cyan(`Express server is listenting PORT (${PORT})`));
+    console.info(chalk.cyan(`Express server is listening PORT (${PORT})`));
   }
 });
