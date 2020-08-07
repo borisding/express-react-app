@@ -5,7 +5,7 @@ const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
-const { getEnv } = require('./env.loader');
+const { getEnv } = require('./env.config');
 const { isDev, paths } = require('./utils');
 
 const publicPath = process.env.PUBLIC_PATH || '/';

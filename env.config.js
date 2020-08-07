@@ -1,6 +1,7 @@
 const fs = require('fs');
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
+const { paths } = require('./utils');
 
 const { NODE_ENV } = process.env;
 if (!NODE_ENV) {
@@ -18,7 +19,9 @@ if (NODE_ENV !== 'production') {
 // expand existing environment variables with targeted .env file
 let parsed;
 if (fs.existsSync(envFile)) {
-  const result = dotenvExpand(dotenv.config({ path: envFile }));
+  const result = dotenvExpand(
+    dotenv.config({ path: `${paths.config}/envFile` })
+  );
   parsed = result.parsed;
 }
 
