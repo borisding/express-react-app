@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
 
-app.listen(3000, err => {
+app.listen(5000, err => {
   if (!err) {
     console.log(err);
   }
 
-  console.info('Server is listenting PORT:', 3000);
+  console.info(`Express server is listenting PORT (${5000})`);
 });
