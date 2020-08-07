@@ -64,7 +64,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "compression-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.2",
-    "css-loader": "^4.2.0",
+    "css-loader": "^4.2.1",
     "eslint": "^7.6.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-jest": "^23.20.0",
