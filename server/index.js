@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const helmet = require('helmet');
 const hpp = require('hpp');
-const { httpLogger } = require('./middleware');
+const { httpLogger, errorHandler } = require('./middleware');
 
 const app = express();
 
@@ -13,6 +13,7 @@ app.use(helmet());
 app.use(hpp());
 app.use(cookieParser());
 app.use(compression());
+app.use(errorHandler());
 
 const { PORT = 5000 } = process.env;
 app.listen(PORT, error => {
