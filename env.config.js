@@ -11,7 +11,7 @@ if (!NODE_ENV) {
 }
 
 // using .env.[NODE_ENV] file instead when not in `production` environment
-let envFile = '.env';
+let envFile = `${paths.config}/.env`;
 if (NODE_ENV !== 'production') {
   envFile = `${envFile}.${NODE_ENV}`;
 }
@@ -19,9 +19,7 @@ if (NODE_ENV !== 'production') {
 // expand existing environment variables with targeted .env file
 let parsed;
 if (fs.existsSync(envFile)) {
-  const result = dotenvExpand(
-    dotenv.config({ path: `${paths.config}/envFile` })
-  );
+  const result = dotenvExpand(dotenv.config({ path: envFile }));
   parsed = result.parsed;
 }
 
