@@ -162,6 +162,7 @@ const webpackConfig = {
     ]
   },
   plugins: [
+    new WebpackBar(),
     new webpack.DefinePlugin(getEnv().stringified),
     new MiniCssExtractPlugin({
       filename: isDev
@@ -219,7 +220,6 @@ if (isDev) {
 } else {
   webpackConfig.plugins = [
     ...webpackConfig.plugins,
-    new WebpackBar(),
     new CompressionWebpackPlugin({
       filename(info) {
         // info.file is the original asset filename
