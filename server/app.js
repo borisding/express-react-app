@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const helmet = require('helmet');
 const hpp = require('hpp');
-const { httpLogger, errorHandler } = require('./middleware');
+const { httpLogger, errorHandler, notFoundHandler } = require('./middleware');
 const { users } = require('./routers');
 const { isDev, paths } = require('../utils');
 
@@ -26,6 +26,7 @@ if (!isDev) {
   });
 }
 
+app.use(notFoundHandler());
 app.use(errorHandler());
 
 const { PORT = 5000 } = process.env;
