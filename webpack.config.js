@@ -59,7 +59,6 @@ const getFileLoaders = options => {
       loader: require.resolve('url-loader'),
       options: {
         fallback: 'file-loader',
-        publicPath,
         limit: 10240,
         ...options
       }
@@ -153,11 +152,15 @@ const webpackConfig = {
       },
       {
         test: /\.(svg|png|jpe?g|gif)(\?.*)?$/i,
-        use: getFileLoaders({ name: 'images/[name].[ext]' })
+        use: getFileLoaders({
+          name: `${publicBuild}/[name].[ext]`
+        })
       },
       {
         test: /\.(eot|ttf|woff2?)(\?.*)?$/i,
-        use: getFileLoaders({ name: 'fonts/[name].[ext]' })
+        use: getFileLoaders({
+          name: `${publicBuild}/[name].[ext]`
+        })
       }
     ]
   },
