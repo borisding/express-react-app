@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const hpp = require('hpp');
 const { httpLogger, errorHandler } = require('./middleware');
 const { users } = require('./routers');
+const { isDev, paths } = require('../utils');
 
 const app = express();
 
@@ -17,13 +18,20 @@ app.use(compression());
 
 app.use('/api/users', users);
 
+// serve files in production environment
+if (!isDev) {
+  app.use('/build', express.static(`${paths.public}/build`));
+  app.get('*', (req, res) => {
+    res.sendFile(`${paths.public}/index.html`);
+  });
+}
+
 app.use(errorHandler());
 
 const { PORT = 5000 } = process.env;
 app.listen(PORT, error => {
   if (error) {
     console.error(`ERROR: ${chalk.red(error)}`);
-  } else {
-    console.info(chalk.cyan(`Express server is listening PORT (${PORT})`));
   }
+  console.info(chalk.cyan(`Express server is listening PORT (${PORT})`));
 });
