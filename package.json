@@ -13,7 +13,7 @@
     "lint": "npm-run-all lint:js lint:style",
     "lint:js": "eslint . --fix",
     "lint:style": "stylelint **/*.{css,scss,sass} --fix",
-    "test": "jest",
+    "test": "cross-env NODE_ENV=test jest",
     "test:watch": "npm test -- --watch",
     "test:update": "npm test -- --updateSnapshot",
     "test:coverage": "rimraf storage/coverage && npm test -- --coverage"
