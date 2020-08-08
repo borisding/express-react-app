@@ -9,8 +9,7 @@ const { getEnv } = require('./env.config');
 const { isDev, paths } = require('./utils');
 
 const publicPath = process.env.PUBLIC_PATH || '/';
-const publicJsFolder = 'js';
-const publicCssFolder = 'css';
+const publicBuild = 'build';
 const devServerPort = 3000;
 
 const getStyleLoaders = (cssLoaderOptions = {}) => {
@@ -98,11 +97,11 @@ const webpackConfig = {
     publicPath,
     path: paths.public,
     filename: isDev
-      ? `${publicJsFolder}/[name].js`
-      : `${publicJsFolder}/[name].[contenthash:8].js`,
+      ? `${publicBuild}/[name].js`
+      : `${publicBuild}/[name].[contenthash:8].js`,
     chunkFilename: isDev
-      ? `${publicJsFolder}/[name].chunk.js`
-      : `${publicJsFolder}/[name].[contenthash:8].chunk.js`
+      ? `${publicBuild}/[name].chunk.js`
+      : `${publicBuild}/[name].[contenthash:8].chunk.js`
   },
   optimization: {
     minimize: !isDev,
@@ -166,11 +165,11 @@ const webpackConfig = {
     new webpack.DefinePlugin(getEnv().stringified),
     new MiniCssExtractPlugin({
       filename: isDev
-        ? `${publicCssFolder}/[name].css`
-        : `${publicCssFolder}/[name].[contenthash:8].css`,
+        ? `${publicBuild}/[name].css`
+        : `${publicBuild}/[name].[contenthash:8].css`,
       chunkFilename: isDev
-        ? `${publicCssFolder}/[name].chunk.css`
-        : `${publicCssFolder}/[name].[contenthash:8].chunk.css`
+        ? `${publicBuild}/[name].chunk.css`
+        : `${publicBuild}/[name].[contenthash:8].chunk.css`
     }),
     new HtmlWebpackPlugin(
       Object.assign(
