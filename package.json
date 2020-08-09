@@ -27,6 +27,11 @@
       "pre-commit": "npm run lint"
     }
   },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not IE 10"
+  ],
   "sideEffects": [
     "*.css",
     "*.scss",
@@ -105,10 +110,5 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
     "webpackbar": "^4.0.0"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not IE 10"
-  ]
+  }
 }
