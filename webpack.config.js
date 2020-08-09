@@ -70,7 +70,7 @@ const webpackConfig = {
   mode: isDev ? 'development' : 'production',
   devtool: isDev ? 'cheap-module-source-map' : 'source-map',
   context: paths.client,
-  entry: './App.js',
+  entry: './index.js',
   resolve: {
     extensions: ['.jsx', '.js', '.json', '.css', '.scss', '.sass']
   },
