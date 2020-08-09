@@ -181,7 +181,7 @@ const webpackConfig = {
         {},
         {
           title: process.env.APP_NAME || 'React App',
-          template: `${paths.assets}/index.ejs`,
+          template: `${paths.assets}/templates/index.ejs`,
           scriptLoading: 'defer'
         },
         !isDev && {
