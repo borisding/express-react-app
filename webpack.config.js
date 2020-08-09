@@ -59,6 +59,7 @@ const getFileLoaders = options => {
       loader: require.resolve('url-loader'),
       options: {
         fallback: 'file-loader',
+        publicPath,
         limit: 10240,
         ...options
       }
