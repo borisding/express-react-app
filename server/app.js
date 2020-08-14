@@ -29,7 +29,7 @@ if (!isDev) {
 app.use(notFoundHandler());
 app.use(errorHandler());
 
-const { PORT = 5000 } = process.env;
+const PORT = parseInt(process.env.PORT, 10) || 5000;
 app.listen(PORT, error => {
   if (error) {
     console.error(`ERROR: ${chalk.red(error)}`);
