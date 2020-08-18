@@ -1,6 +1,6 @@
 {
   "name": "express-react-app",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "React app starter, powered by Express as backend server.",
   "main": "index.js",
   "scripts": {
