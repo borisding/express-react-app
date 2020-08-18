@@ -10,11 +10,12 @@ const { isDev, paths } = require('../utils');
 
 const app = express();
 
-app.use(httpLogger());
 app.use(helmet());
-app.use(hpp());
+app.use(httpLogger());
 app.use(cookieParser());
 app.use(compression());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }), hpp());
 
 app.use('/api/users', users);
 
