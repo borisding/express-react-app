@@ -7,7 +7,7 @@ import { ErrorFallback, Spinner } from './';
 function Layout({ route }) {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Suspense fallback={Spinner}>{renderRoutes(route.routes)}</Suspense>
+      <Suspense fallback={<Spinner />}>{renderRoutes(route.routes)}</Suspense>
     </ErrorBoundary>
   );
 }
