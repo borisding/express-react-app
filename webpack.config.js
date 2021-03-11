@@ -16,11 +16,7 @@ const getStyleLoaders = (cssLoaderOptions = {}) => {
   const sourceMap = !!isDev;
   return [
     {
-      loader: MiniCssExtractPlugin.loader,
-      options: {
-        hmr: !!isDev,
-        reloadAll: !!isDev
-      }
+      loader: MiniCssExtractPlugin.loader
     },
     {
       loader: require.resolve('css-loader'),
