@@ -3,8 +3,10 @@ const WebpackBar = require('webpackbar');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 const { getEnv } = require('./env.config');
 const { isDev, paths } = require('./utils');
 
@@ -30,16 +32,14 @@ const getStyleLoaders = (cssLoaderOptions = {}) => {
       loader: require.resolve('postcss-loader'),
       options: {
         sourceMap,
-        plugins: () => [
-          require('postcss-flexbugs-fixes'),
-          require('postcss-preset-env')({
-            stage: 3,
-            autoprefixer: {
-              grid: true,
+        postcssOptions: {
+          plugins: [
+            autoprefixer({
+              grid: 'autoplace',
               flexbox: 'no-2009'
-            }
-          })
-        ]
+            })
+          ]
+        }
       }
     },
     {
@@ -65,20 +65,12 @@ const getFileLoaders = options => {
 
 const webpackConfig = {
   mode: isDev ? 'development' : 'production',
+  target: 'web',
   devtool: isDev ? 'cheap-module-source-map' : 'source-map',
   context: paths.client,
   entry: './index.js',
   resolve: {
     extensions: ['.jsx', '.js', '.json', '.css', '.scss', '.sass']
-  },
-  node: {
-    child_process: 'empty',
-    dgram: 'empty',
-    dns: 'mock',
-    fs: 'empty',
-    module: 'empty',
-    net: 'empty',
-    tls: 'empty'
   },
   performance: isDev
     ? { hints: false }
@@ -105,10 +97,8 @@ const webpackConfig = {
       new TerserJSPlugin({
         /* set your options here, if any */
       }),
-      new OptimizeCssAssetsPlugin({
-        cssProcessorOptions: {
-          parser: require('postcss-safe-parser')
-        }
+      new CssMinimizerPlugin({
+        /* set your options here, if any */
       })
     ],
     splitChunks: {
@@ -163,6 +153,7 @@ const webpackConfig = {
   },
   plugins: [
     new WebpackBar(),
+    new NodePolyfillPlugin(),
     new webpack.DefinePlugin(getEnv().stringified),
     new MiniCssExtractPlugin({
       filename: isDev
@@ -212,12 +203,7 @@ const webpackConfig = {
 };
 
 // opt in plugins based on current environment mode
-if (isDev) {
-  webpackConfig.plugins = [
-    ...webpackConfig.plugins,
-    new webpack.HotModuleReplacementPlugin()
-  ];
-} else {
+if (!isDev) {
   webpackConfig.plugins = [
     ...webpackConfig.plugins,
     new CompressionWebpackPlugin({
