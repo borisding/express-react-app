@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const WebpackBar = require('webpackbar');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
@@ -92,11 +91,7 @@ const webpackConfig = {
       : `${publicBuild}/[name].[contenthash:8].chunk.js`
   },
   optimization: {
-    minimize: !isDev,
     minimizer: [
-      new TerserJSPlugin({
-        /* set your options here, if any */
-      }),
       new CssMinimizerPlugin({
         /* set your options here, if any */
       })
@@ -206,18 +201,7 @@ const webpackConfig = {
 if (!isDev) {
   webpackConfig.plugins = [
     ...webpackConfig.plugins,
-    new CompressionWebpackPlugin({
-      filename(info) {
-        // info.file is the original asset filename
-        // info.path is the path of the original asset
-        // info.query is the query
-        return `${info.path}.gz${info.query}`;
-      },
-      algorithm: 'gzip',
-      test: /\.(js|css|html|svg)$/,
-      threshold: 10240,
-      minRatio: 0.8
-    })
+    new CompressionWebpackPlugin()
   ];
 }
 
