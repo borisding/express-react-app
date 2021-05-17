@@ -71,15 +71,6 @@ const webpackConfig = {
   resolve: {
     extensions: ['.jsx', '.js', '.json', '.css', '.scss', '.sass']
   },
-  performance: isDev
-    ? { hints: false }
-    : {
-        maxEntrypointSize: 400000,
-        maxAssetSize: 400000,
-        assetFilter: assetFilename => {
-          return !/\.map$/.test(assetFilename);
-        }
-      },
   output: {
     publicPath,
     path: paths.public,
@@ -95,10 +86,7 @@ const webpackConfig = {
       new CssMinimizerPlugin({
         /* set your options here, if any */
       })
-    ],
-    splitChunks: {
-      chunks: 'all'
-    }
+    ]
   },
   module: {
     rules: [
