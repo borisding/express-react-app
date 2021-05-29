@@ -38,5 +38,5 @@ module.exports = {
     'react/jsx-no-target-blank': 1,
     'prettier/prettier': ['error', prettierConfig]
   },
-  ignorePatterns: ['public/**/*']
+  ignorePatterns: ['public/**/*', 'storage/coverage/**/*']
 };

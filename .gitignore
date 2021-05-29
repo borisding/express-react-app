@@ -1,6 +1,6 @@
 /node_modules
 /public
-
+/storage/coverage
 .DS_Store
 .env
 *.log
