@@ -11,8 +11,8 @@ Please make sure your machine has met the following requirements before you star
 
 | Dependency |   Version   |
 | ---------- | :---------: |
-| Node       | >= v10.13.0 |
-| NPM        |  >= v6.4.1  |
+| Node       | >= v12.13.0 |
+| NPM        | >= v6.12.0  |
 
 ## Quick Start
 
