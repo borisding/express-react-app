@@ -31,9 +31,10 @@ app.use(notFoundHandler());
 app.use(errorHandler());
 
 const PORT = parseInt(process.env.PORT, 10) || 5000;
-app.listen(PORT, error => {
-  if (error) {
-    console.error(`ERROR: ${chalk.red(error)}`);
-  }
-  console.info(chalk.cyan(`Express server is listening PORT (${PORT})`));
-});
+app
+  .listen(PORT, () => {
+    console.info(chalk.cyan(`Express server is listening PORT (${PORT})`));
+  })
+  .on('error', error => {
+    console.error(`ERROR: ${chalk.red(error.message)}`);
+  });
