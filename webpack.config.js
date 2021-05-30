@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const WebpackBar = require('webpackbar');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
@@ -81,8 +82,38 @@ const webpackConfig = {
       ? `${publicBuild}/[name].chunk.js`
       : `${publicBuild}/[name].[contenthash:8].chunk.js`
   },
+  performance: isDev
+    ? { hints: false }
+    : {
+        maxEntrypointSize: 350000,
+        maxAssetSize: 350000,
+        assetFilter(assetFilename) {
+          return !/\.map$/.test(assetFilename);
+        }
+      },
   optimization: {
+    runtimeChunk: {
+      name: entrypoint => `runtime~${entrypoint.name}`
+    },
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all'
+        }
+      }
+    },
+    minimize: !isDev,
     minimizer: [
+      new TerserJSPlugin({
+        terserOptions: {
+          format: {
+            comments: false
+          }
+        },
+        extractComments: false
+      }),
       new CssMinimizerPlugin({
         /* set your options here, if any */
       })
