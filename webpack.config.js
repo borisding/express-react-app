@@ -6,10 +6,12 @@ const TerserJSPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const autoprefixer = require('autoprefixer');
 const { getEnv } = require('./env.config');
 const { isDev, paths } = require('./utils');
 
+const isAnalyze = Boolean(process.env.ANALYZE_MODE) === true;
 const publicPath = process.env.PUBLIC_PATH || '/';
 const publicBuild = 'build';
 const devServerPort = 3000;
@@ -220,7 +222,11 @@ const webpackConfig = {
 if (!isDev) {
   webpackConfig.plugins = [
     ...webpackConfig.plugins,
-    new CompressionWebpackPlugin()
+    new CompressionWebpackPlugin(),
+    new BundleAnalyzerPlugin({
+      analyzerMode: isAnalyze ? 'server' : 'disabled',
+      openAnalyzer: isAnalyze
+    })
   ];
 }
 
