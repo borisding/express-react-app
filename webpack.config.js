@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const WebpackBar = require('webpackbar');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
@@ -168,8 +167,8 @@ const webpackConfig = {
     ]
   },
   plugins: [
-    new WebpackBar(),
     new NodePolyfillPlugin(),
+    new webpack.ProgressPlugin(),
     new webpack.DefinePlugin(getEnv().stringified),
     new MiniCssExtractPlugin({
       filename: isDev
