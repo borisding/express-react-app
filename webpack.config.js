@@ -19,7 +19,10 @@ const getStyleLoaders = (cssLoaderOptions = {}) => {
   const sourceMap = !!isDev;
   return [
     {
-      loader: MiniCssExtractPlugin.loader
+      loader: MiniCssExtractPlugin.loader,
+      options: {
+        publicPath
+      }
     },
     {
       loader: require.resolve('css-loader'),
