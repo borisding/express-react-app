@@ -3,13 +3,12 @@
 
 const code = 404;
 const notFoundHandler = () => (req, res) => {
-  res.status(code);
-  res.format({
+  res.status(code).format({
     json() {
-      res.send({ code, message: 'Resource not found.' });
-    },
-    html() {
-      res.render(`${code}`, { code, message: 'Page not found.' });
+      res.send({
+        code,
+        message: 'Resource not found.'
+      });
     }
   });
 };
